@@ -34,4 +34,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputEditText"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="361dp"
+        android:layout_height="1903dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
