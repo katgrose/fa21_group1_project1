@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,7 +26,10 @@ import java.util.List;
 
 
 public class PictureSearch extends AppCompatActivity {
+    Button searchBtn;
+    EditText keywordText;
 
+    Button bSavedImages;
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
     private List<ImageItem> mList;
@@ -32,19 +39,36 @@ public class PictureSearch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_search);
 
+        //Saved Images activity
+
+        bSavedImages = (Button) findViewById(R.id.btnSavedImages);
+        bSavedImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSavedImagesActivity();
+            }
+        });
+
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        searchBtn = findViewById(R.id.searchButton);
+        keywordText = findViewById(R.id.keywordField);
         requestQueue = VolleySingleton.getmInstance(this).getRequestQueue();
 
         mList = new ArrayList<>();
-        fetchData();
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mList.clear();
+                fetchData();
+            }
+        });
     }
 
     private void fetchData() {
 
-        String url = "https://pixabay.com/api/?key=20481069-b7515ab630a25b9504d55e812&q=animal&image_type=photo&pretty=true";
+        String url = "https://pixabay.com/api/?key=20481069-b7515ab630a25b9504d55e812&q=" + keywordText.getText().toString() + "&image_type=photo&pretty=true";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -77,6 +101,11 @@ public class PictureSearch extends AppCompatActivity {
 
         requestQueue.add(jsonObjectRequest);
     }
+
+    public void openSavedImagesActivity(){
+        Intent intent =  SavedImages.getIntent(getApplicationContext(),"Login successful!!!!");
+        startActivity(intent);
+    };
 
 
 }
