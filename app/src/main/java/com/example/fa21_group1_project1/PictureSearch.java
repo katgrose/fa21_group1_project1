@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,15 +28,26 @@ import java.util.List;
 public class PictureSearch extends AppCompatActivity {
     Button searchBtn;
     EditText keywordText;
+
+    Button bSavedImages;
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
     private List<ImageItem> mList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_search);
+
+        //Saved Images activity
+
+        bSavedImages = (Button) findViewById(R.id.btnSavedImages);
+        bSavedImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSavedImagesActivity();
+            }
+        });
 
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -89,6 +101,11 @@ public class PictureSearch extends AppCompatActivity {
 
         requestQueue.add(jsonObjectRequest);
     }
+
+    public void openSavedImagesActivity(){
+        Intent intent =  SavedImages.getIntent(getApplicationContext(),"Login successful!!!!");
+        startActivity(intent);
+    };
 
 
 }
