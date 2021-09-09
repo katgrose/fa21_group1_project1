@@ -61,14 +61,15 @@ public class PictureSearch extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mList.clear();
-                fetchData();
+                String searchTerm = keywordText.getText().toString();
+                fetchData(searchTerm);
             }
         });
     }
 
-    private void fetchData() {
+    private String fetchData(String searchTerm) {
 
-        String url = "https://pixabay.com/api/?key=20481069-b7515ab630a25b9504d55e812&q=" + keywordText.getText().toString() + "&image_type=photo&pretty=true";
+        String url = "https://pixabay.com/api/?key=20481069-b7515ab630a25b9504d55e812&q="+ searchTerm + "&image_type=photo&pretty=true";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -100,6 +101,7 @@ public class PictureSearch extends AppCompatActivity {
         });
 
         requestQueue.add(jsonObjectRequest);
+        return url;
     }
 
     public void openSavedImagesActivity(){
