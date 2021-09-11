@@ -14,7 +14,7 @@ public interface AccountsDao {
     @Query("SELECT * FROM accounts_table WHERE accounts_username LIKE :username")
     Accounts findTodoByUsername(String username);
 
-    @Query("SELECT * FROM accounts_table WHERE accounts_username LIKE :username AND :password")
+    @Query("SELECT * FROM accounts_table WHERE accounts_username LIKE :username AND accounts_password LIKE :password")
     Accounts findTodoByCredentials(String username, String password);
 
     @Delete

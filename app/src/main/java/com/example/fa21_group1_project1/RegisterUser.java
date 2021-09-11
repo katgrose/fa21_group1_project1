@@ -3,6 +3,8 @@ package com.example.fa21_group1_project1;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,26 +36,41 @@ public class RegisterUser extends AppCompatActivity {
                 String enteredUsername = username.getText().toString().trim();
                 String enteredPassword = password.getText().toString().trim();
                 Accounts checkAccountExist = accountsDao.findTodoByUsername(enteredUsername);
-                accountsDao.insertAccount(validateNewUser(enteredUsername, enteredPassword, checkAccountExist));
+                Accounts newAccount = validateNewUser(enteredUsername, enteredPassword, checkAccountExist);
+                if (newAccount != null) {
+                    accountsDao.insertAccount(newAccount);
+                    registerSuccess();
+                }
             }
         });
     }
 
-    static public boolean checkForValidUsername (String user, Accounts account) {
+    public void registerSuccess() {
+        Intent intent = new Intent(this, MainActivity.class);
+        Toast.makeText(this, "Register Successful!", Toast.LENGTH_LONG).show();
+        startActivity(intent);
+    }
+
+    static public boolean checkForValidUsername (String user, Accounts account, Context context) {
         if (user.isEmpty()) {
+            Toast.makeText(context, "Your username can not be empty please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
             return false;
         } else if (user.length() < 5) {
+            Toast.makeText(context, "Your username is invalid please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
             return false;
         } else if (account != null) {
+            Toast.makeText(context, "Your username is already taken please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
     }
 
-    static public boolean checkForValidPassword (String pass) {
+    static public boolean checkForValidPassword (String pass, Context context) {
         if (pass.isEmpty()) {
+            Toast.makeText(context, "Your password can not be empty please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
             return false;
         } else if (pass.length() < 5) {
+            Toast.makeText(context, "Your password is invalid please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
@@ -62,22 +79,17 @@ public class RegisterUser extends AppCompatActivity {
     public Accounts validateNewUser(String enteredUsername, String enteredPassword, Accounts account) {
         boolean goodUsername, goodPassword;
 
-        if (checkForValidUsername(enteredUsername, account)) {
+        if (checkForValidUsername(enteredUsername, account, getApplicationContext())) {
             goodUsername = true;
-        }
-        else {
-            Toast.makeText(getApplicationContext(), "Please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
+        } else {
             goodUsername = false;
         }
-
-        if (checkForValidPassword(enteredPassword)) {
+        if (checkForValidPassword(enteredPassword, getApplicationContext())) {
             goodPassword = true;
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), "Please enter a valid password! (5 characters or more)", Toast.LENGTH_LONG).show();
             goodPassword = false;
         }
-
         if (goodUsername && goodPassword) {
             Accounts newAccount = new Accounts(enteredUsername, enteredPassword);
             return newAccount;

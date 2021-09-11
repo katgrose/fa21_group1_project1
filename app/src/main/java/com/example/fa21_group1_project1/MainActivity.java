@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 String enteredPassword = password.getText().toString();
                 Accounts checkAccountExist = accountsDao.findTodoByCredentials(enteredUsername, enteredPassword);
 
-                if (validateUser(enteredUsername, enteredPassword, checkAccountExist)) {
+                if (validateUser(checkAccountExist)) {
                     loginSuccess();
                 }
                 else {
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // temporary method in which we will login until we work out Room Databases likely will need getUsers()
-    static public boolean validateUser (String user, String pass, Accounts account) {
+    static public boolean validateUser (Accounts account) {
         if (account != null) {
             return true;
         }
