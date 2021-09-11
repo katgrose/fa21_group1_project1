@@ -1,4 +1,4 @@
-# fa21_group1_project1
+# Pixabay Photo Search
 A simple Pixabay Photo Search and Share engine
 Search for photos, save them, and send them to friends!
 
