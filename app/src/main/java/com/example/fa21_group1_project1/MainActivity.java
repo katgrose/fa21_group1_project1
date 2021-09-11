@@ -18,7 +18,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AccountsDatabase db = Room.databaseBuilder(getApplicationContext(), AccountsDatabase.class, "accounts_table").allowMainThreadQueries().build();
+        AccountsDatabase db = Room.databaseBuilder(getApplicationContext(), AccountsDatabase.class, "accounts_table")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
         AccountsDao accountsDao = db.AccountsDao();
 
         loginBtn = findViewById(R.id.loginButton);

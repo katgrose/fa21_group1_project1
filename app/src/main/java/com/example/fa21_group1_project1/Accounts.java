@@ -8,14 +8,13 @@ import androidx.room.PrimaryKey;
 public class Accounts {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "accounts_uid")
-    private int uid;
+    public int uid;
 
     @ColumnInfo(name = "accounts_username")
-    private String username;
+    public String username;
 
     @ColumnInfo(name = "accounts_password")
-    private String pw;
+    public String pw;
 
     public Accounts(String username, String pw) {
         this.username = username;

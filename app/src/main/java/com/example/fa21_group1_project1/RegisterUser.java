@@ -18,7 +18,10 @@ public class RegisterUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
-        AccountsDatabase db = Room.databaseBuilder(getApplicationContext(), AccountsDatabase.class, "accounts_table").allowMainThreadQueries().build();
+        AccountsDatabase db = Room.databaseBuilder(getApplicationContext(), AccountsDatabase.class, "accounts_table")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
         AccountsDao accountsDao = db.AccountsDao();
 
         registerBtn = findViewById(R.id.registerNewButton);
@@ -26,13 +29,12 @@ public class RegisterUser extends AppCompatActivity {
         password = findViewById(R.id.fieldPassword);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
-            String enteredUsername = username.getText().toString().trim();
-            String enteredPassword = password.getText().toString().trim();
-
-
             @Override
             public void onClick(View view) {
-                accountsDao.insertAccount(validateNewUser(enteredUsername, enteredPassword, accountsDao));
+                String enteredUsername = username.getText().toString().trim();
+                String enteredPassword = password.getText().toString().trim();
+                Accounts checkAccountExist = accountsDao.findTodoByUsername(enteredUsername);
+                accountsDao.insertAccount(validateNewUser(enteredUsername, enteredPassword, checkAccountExist));
             }
         });
     }
@@ -57,11 +59,10 @@ public class RegisterUser extends AppCompatActivity {
         return true;
     }
 
-    public Accounts validateNewUser(String enteredUsername, String enteredPassword, AccountsDao accountsDao) {
+    public Accounts validateNewUser(String enteredUsername, String enteredPassword, Accounts account) {
         boolean goodUsername, goodPassword;
-        Accounts existingAccount = accountsDao.findTodoByUsername(enteredUsername);
 
-        if (checkForValidUsername(enteredUsername, existingAccount)) {
+        if (checkForValidUsername(enteredUsername, account)) {
             goodUsername = true;
         }
         else {
