@@ -1,6 +1,7 @@
 package com.example.fa21_group1_project1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,16 +18,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AccountsDatabase db = Room.databaseBuilder(getApplicationContext(), AccountsDatabase.class, "accounts_table")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+        AccountsDao accountsDao = db.AccountsDao();
+
         loginBtn = findViewById(R.id.loginButton);
         registerBtn = findViewById(R.id.registerButton);
         username = findViewById(R.id.fieldUsername);
         password = findViewById(R.id.fieldPassword);
 
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String enteredUsername = username.getText().toString();
+                String enteredPassword = password.getText().toString();
+                Accounts checkAccountExist = accountsDao.findTodoByCredentials(enteredUsername, enteredPassword);
 
-                if (validateUser(username.getText().toString(), password.getText().toString())) {
+                if (validateUser(checkAccountExist)) {
                     loginSuccess();
                 }
                 else {
@@ -34,14 +45,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registerUser();
+            }
+        });
+
     }
 
     // temporary method in which we will login until we work out Room Databases likely will need getUsers()
-    static public boolean validateUser (String user, String pass) {
-        if (user.equals("admin") && pass.equals("admin")) {
+    static public boolean validateUser (Accounts account) {
+        if (account != null) {
             return true;
         }
         return false;
+    }
+
+    public void registerUser() {
+        Intent intent = new Intent(this, RegisterUser.class);
+        startActivity(intent);
     }
 
     public void loginSuccess() {
