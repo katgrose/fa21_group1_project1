@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void registerUser() {
         Intent intent = new Intent(this, RegisterUser.class);
+        intent.putExtra("testSwitch", true);
         startActivity(intent);
     }
 

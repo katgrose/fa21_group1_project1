@@ -17,7 +17,7 @@ public class ExampleUnitTest {
 
     @Test
     public void testLogin(){
-//        assertTrue(MainActivity.validateUser("admin","admin"));
+       assertTrue(MainActivity.validateUser(new Accounts("admin", "admin")));
     }
 
 

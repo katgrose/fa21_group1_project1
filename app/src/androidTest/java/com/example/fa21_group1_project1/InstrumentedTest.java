@@ -28,7 +28,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 @RunWith(AndroidJUnit4.class)
 public class InstrumentedTest {
     @Test
-    public void useAppContext() {
+    public void pixabayAPITest() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Intent intent = new Intent(appContext, PictureSearch.class);
@@ -62,4 +62,31 @@ public class InstrumentedTest {
         });
 
     }
+
+    @Test
+    public void daoTest(){
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        AccountsDatabase db = AccountsDatabase.getInstance(appContext);
+        AccountsDao accountsDao = db.AccountsDao();
+        // get account
+        // save account to variable
+        Accounts savedAccount = accountsDao.findTodoByUsername("admin1");
+        // delete account
+        accountsDao.deleteAccount(savedAccount);
+        // Assert deleted
+        assertNull(accountsDao.findTodoByUsername("admin1"));
+        // insert account
+        Accounts replacementAccount = new Accounts("admin1", "admin1");
+        accountsDao.insertAccount(replacementAccount);
+        // check if it exists
+        assertNotNull(accountsDao.findTodoByUsername("admin1"));
+    }
+
+//    @Test
+//    public void mainIntentSwitchTest(){
+//        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+//        appContext.startActivity(new Intent(appContext, MainActivity.class));
+//        appContext
+//    }
+
 }
