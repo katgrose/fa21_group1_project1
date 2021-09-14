@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    Button loginBtn, registerBtn;
+    Button loginBtn, registerBtn, viewAccountsBtn;
     EditText username, password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         loginBtn = findViewById(R.id.loginButton);
         registerBtn = findViewById(R.id.registerButton);
+        viewAccountsBtn = findViewById(R.id.showAccountsButton);
         username = findViewById(R.id.fieldUsername);
         password = findViewById(R.id.fieldPassword);
 
@@ -53,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        viewAccountsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewAccounts();
+            }
+        });
+
     }
 
     // temporary method in which we will login until we work out Room Databases likely will need getUsers()
@@ -65,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void registerUser() {
         Intent intent = new Intent(this, RegisterUser.class);
+        intent.putExtra("testSwitch", true);
+        startActivity(intent);
+    }
+
+    public void viewAccounts() {
+        Intent intent = new Intent(this, ViewAccounts.class);
         startActivity(intent);
     }
 

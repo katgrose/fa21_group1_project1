@@ -13,7 +13,7 @@ public abstract class AccountsDatabase extends RoomDatabase {
 
     private static volatile AccountsDatabase INSTANCE;
 
-    static AccountsDatabase getInstance(Context context) {
+    public static AccountsDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AccountsDatabase.class) {
                 if (INSTANCE == null) {
