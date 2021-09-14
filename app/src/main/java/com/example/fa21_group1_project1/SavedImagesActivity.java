@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class SavedImages extends AppCompatActivity {
+public class SavedImagesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +15,7 @@ public class SavedImages extends AppCompatActivity {
     }
 
     public static Intent getIntent(Context context, String toastValue){
-        Intent intent = new Intent(context, SavedImages.class);
+        Intent intent = new Intent(context, SavedImagesActivity.class);
 
         //intent.putExtra(SavedImages.ACTIVITY_LABEL,toastValue);
 
