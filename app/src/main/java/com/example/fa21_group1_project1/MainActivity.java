@@ -72,7 +72,10 @@ public class MainActivity extends AppCompatActivity {
     public void loginSuccess(int uid) {
         Intent intent = new Intent(this, PictureSearch.class);
         Toast.makeText(this, "Login Successful!", Toast.LENGTH_LONG).show();
-        intent.putExtra("userId", uid);
+        // Pass User Id to PictureSearch Activity
+        Bundle extraInfo = new Bundle();
+        extraInfo.putInt("userId", uid);
+        intent.putExtras(extraInfo);
         startActivity(intent);
     }
 

@@ -33,11 +33,20 @@ public class PictureSearch extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
     private List<ImageItem> mList;
-
+    int passedUid = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_search);
+
+        // Get passed User Id from MainActivity loginSuccess
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            passedUid = extras.getInt("userId");
+        }
+        // Test code: display User Id in Toast
+        String text = "UserId: " + passedUid;
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
 
         //Saved Images activity
 
@@ -45,7 +54,7 @@ public class PictureSearch extends AppCompatActivity {
         bSavedImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openSavedImagesActivity();
+                openSavedImagesActivity(passedUid);
             }
         });
 
@@ -104,8 +113,12 @@ public class PictureSearch extends AppCompatActivity {
         return url;
     }
 
-    public void openSavedImagesActivity(){
+    public void openSavedImagesActivity(int uid){
         Intent intent =  SavedImagesActivity.getIntent(getApplicationContext(),"Login successful!!!!");
+        // Pass User Id to PictureSearch Activity
+        Bundle extraInfo = new Bundle();
+        extraInfo.putInt("userId", uid);
+        intent.putExtras(extraInfo);
         startActivity(intent);
     };
 
