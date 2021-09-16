@@ -74,4 +74,13 @@ public class SavedImage {
     public void setLikes(int likes) {
         this.likes = likes;
     }
+    @Override
+    public String toString() {
+        return "SavedImage{" +
+                "img='" + imageUrl + '\'' +
+                ", tags='" + tags + '\'' +
+                ", lies='" + likes + '\'' +
+                '}';
+    }
+
 }

@@ -18,6 +18,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     Context context;
     List<ImageItem> postList;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
 
     public PostAdapter(Context context, List<ImageItem> postList){
         this.context = context;
@@ -28,7 +38,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     @Override
     public PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View mView = LayoutInflater.from(context).inflate(R.layout.individual_image_post, parent, false);
-        return new PostHolder(mView);
+        return new PostHolder(mView, mListener);
 
     }
 
@@ -50,9 +60,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         ImageView imageView;
         TextView mLikes, mTags;
         View view;
-        public PostHolder(@NonNull View itemView) {
+        public PostHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             view = itemView;
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener != null){
+                        int position =  getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
 
         public void setImageView(String url){
