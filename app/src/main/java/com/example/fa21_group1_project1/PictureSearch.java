@@ -105,7 +105,7 @@ public class PictureSearch extends AppCompatActivity {
     }
 
     public void openSavedImagesActivity(){
-        Intent intent =  SavedImages.getIntent(getApplicationContext(),"Login successful!!!!");
+        Intent intent =  SavedImagesActivity.getIntent(getApplicationContext(),"Login successful!!!!");
         startActivity(intent);
     };
 

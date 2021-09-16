@@ -15,7 +15,7 @@
             android:name=".RegisterUser"
             android:exported="true" />
         <activity
-            android:name=".SavedImages"
+            android:name=".SavedImagesActivity"
             android:exported="true" />
         <activity
             android:name=".PictureSearch"
