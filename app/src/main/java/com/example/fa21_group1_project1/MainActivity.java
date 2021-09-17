@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     TextView fetchauthor;
     RequestQueue mQueue;
     Button buttonParse;
+    Button nasaAPOD;
 
 
     @Override
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         fetchquote = findViewById(R.id.quote);
         fetchauthor = findViewById(R.id.author);
         buttonParse = findViewById(R.id.quoteBtn);
+        nasaAPOD = findViewById(R.id.nasaApodBtn);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 jsonParse();
+            }
+        });
+
+        nasaAPOD.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                nasaAPODdisplay();
             }
         });
 
@@ -133,5 +142,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mQueue.add(objectRequest);
+    }
+
+    public void nasaAPODdisplay(){
+        Intent intent = new Intent(this, NasaAPOD.class);
+        startActivity(intent);
     }
 }
