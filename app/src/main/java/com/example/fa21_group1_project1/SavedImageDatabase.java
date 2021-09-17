@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {SavedImage.class, Accounts.class}, version = 1, exportSchema = false)
+@Database(entities = {SavedImage.class, Accounts.class}, version = 2, exportSchema = false)
 public abstract class SavedImageDatabase extends RoomDatabase {
     public abstract SavedImageDao SavedImageDao();
 

@@ -7,10 +7,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "saved_images", foreignKeys = @ForeignKey(entity = Accounts.class,
-        parentColumns = "uid",
-        childColumns = "uid",
-        onDelete = CASCADE))
+@Entity(tableName = "saved_images")
 
 public class SavedImage {
     @PrimaryKey(autoGenerate = true)
@@ -74,4 +71,13 @@ public class SavedImage {
     public void setLikes(int likes) {
         this.likes = likes;
     }
+    @Override
+    public String toString() {
+        return "SavedImage{" +
+                "img='" + imageUrl + '\'' +
+                ", tags='" + tags + '\'' +
+                ", likes='" + likes + '\'' +
+                '}';
+    }
+
 }

@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 Accounts checkAccountExist = accountsDao.findTodoByCredentials(enteredUsername, enteredPassword);
 
                 if (validateUser(checkAccountExist)) {
-                    loginSuccess();
+                    loginSuccess(checkAccountExist.getUid());
                 }
                 else {
                     loginFailure();
@@ -106,9 +106,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void loginSuccess() {
+    public void loginSuccess(int userID) {
         Intent intent = new Intent(this, PictureSearch.class);
         Toast.makeText(this, "Login Successful!", Toast.LENGTH_LONG).show();
+        Bundle extraInfo = new Bundle();
+        extraInfo.putInt("userID",userID);
+        intent.putExtras(extraInfo);
         startActivity(intent);
     }
 

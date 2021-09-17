@@ -3,6 +3,7 @@ package com.example.fa21_group1_project1;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,16 +29,29 @@ import java.util.List;
 public class PictureSearch extends AppCompatActivity {
     Button searchBtn;
     EditText keywordText;
-
+    Button bEditAccount;
     Button bSavedImages;
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
     private List<ImageItem> mList;
+    int passedUid = 0;
+    SavedImage savedItem = null;
+    SavedImageDao savedImageDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_search);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            passedUid = extras.getInt("userID");
+        }
+        SavedImageDatabase db = Room.databaseBuilder(getApplicationContext(), SavedImageDatabase.class, "saved_images")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+        savedImageDao = db.SavedImageDao();
 
         //Saved Images activity
 
@@ -48,6 +62,17 @@ public class PictureSearch extends AppCompatActivity {
                 openSavedImagesActivity();
             }
         });
+
+        //Edit Account activity
+
+        bEditAccount = (Button) findViewById(R.id.btnEditAccount);
+        bEditAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditAccountActivity();
+            }
+        });
+
 
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -63,8 +88,12 @@ public class PictureSearch extends AppCompatActivity {
                 mList.clear();
                 String searchTerm = keywordText.getText().toString();
                 fetchData(searchTerm);
+
             }
         });
+
+        //save image to saved images
+
     }
 
     private String fetchData(String searchTerm) {
@@ -83,12 +112,24 @@ public class PictureSearch extends AppCompatActivity {
                         String tags = jsonObject.getString("tags");
 
                         ImageItem post = new ImageItem(imageUrl, tags, likes);
+
                         mList.add(post);
                     }
 
                     PostAdapter adapter = new PostAdapter(PictureSearch.this, mList);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+
+                    adapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            savedItem = createSavedImage(mList.get(position));
+                            if (savedItem != null) {
+                                savedImageDao.insertSavedImage(savedItem);
+                            }
+                            Toast.makeText(PictureSearch.this, savedItem.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -106,8 +147,29 @@ public class PictureSearch extends AppCompatActivity {
 
     public void openSavedImagesActivity(){
         Intent intent =  SavedImagesActivity.getIntent(getApplicationContext(),"Login successful!!!!");
+        Bundle extraInfo = new Bundle();
+        extraInfo.putInt("userID",passedUid);
+        intent.putExtras(extraInfo);
         startActivity(intent);
     };
+
+    public SavedImage createSavedImage(ImageItem post)
+    {
+
+        return new SavedImage(passedUid,post.getImageUrl(),post.getTags(),post.getLikes());
+    };
+
+    public void openEditAccountActivity()
+    {
+        Intent intent = EditAccountActivity.getIntent(getApplicationContext());
+        Bundle extraInfo = new Bundle();
+        extraInfo.putInt("userID",passedUid);
+        intent.putExtras(extraInfo);
+        startActivity(intent);
+    };
+
+
+
 
 
 }
