@@ -29,7 +29,7 @@ import java.util.List;
 public class PictureSearch extends AppCompatActivity {
     Button searchBtn;
     EditText keywordText;
-
+    Button bEditAccount;
     Button bSavedImages;
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
@@ -62,6 +62,17 @@ public class PictureSearch extends AppCompatActivity {
                 openSavedImagesActivity();
             }
         });
+
+        //Edit Account activity
+
+        bEditAccount = (Button) findViewById(R.id.btnEditAccount);
+        bEditAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditAccountActivity();
+            }
+        });
+
 
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -136,6 +147,9 @@ public class PictureSearch extends AppCompatActivity {
 
     public void openSavedImagesActivity(){
         Intent intent =  SavedImagesActivity.getIntent(getApplicationContext(),"Login successful!!!!");
+        Bundle extraInfo = new Bundle();
+        extraInfo.putInt("userID",passedUid);
+        intent.putExtras(extraInfo);
         startActivity(intent);
     };
 
@@ -143,6 +157,15 @@ public class PictureSearch extends AppCompatActivity {
     {
 
         return new SavedImage(passedUid,post.getImageUrl(),post.getTags(),post.getLikes());
+    };
+
+    public void openEditAccountActivity()
+    {
+        Intent intent = EditAccountActivity.getIntent(getApplicationContext());
+        Bundle extraInfo = new Bundle();
+        extraInfo.putInt("userID",passedUid);
+        intent.putExtras(extraInfo);
+        startActivity(intent);
     };
 
 

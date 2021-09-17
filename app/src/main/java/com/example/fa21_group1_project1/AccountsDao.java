@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -22,6 +23,12 @@ public interface AccountsDao {
 
     @Query("SELECT * FROM accounts_table WHERE accounts_username LIKE :username AND accounts_password LIKE :password")
     Accounts findTodoByCredentials(String username, String password);
+
+    @Query("SELECT * FROM accounts_table WHERE uid LIKE :uid")
+    Accounts findTodoByUid(int uid);
+
+    @Update
+    void updateAccount(Accounts account);
 
     @Delete
     void deleteAccount(Accounts account);
