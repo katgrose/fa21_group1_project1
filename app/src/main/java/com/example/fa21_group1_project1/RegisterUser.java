@@ -51,49 +51,78 @@ public class RegisterUser extends AppCompatActivity {
         startActivity(intent);
     }
 
-    static public boolean checkForValidUsername (String user, Accounts account, Context context) {
+    static public int checkForValidUsername (String user, Accounts account) {
         if (user.isEmpty()) {
-            Toast.makeText(context, "Your username can not be empty please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
-            return false;
+            return 1;
         } else if (user.length() < 5) {
-            Toast.makeText(context, "Your username is invalid please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
-            return false;
+            return 2;
         } else if (account != null) {
-            Toast.makeText(context, "Your username is already taken please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
-            return false;
+            return 3;
         }
-        return true;
+        return 0;
     }
 
-    static public boolean checkForValidPassword (String pass, Context context) {
+
+    static public int checkForValidPassword (String pass) {
         if (pass.isEmpty()) {
-            Toast.makeText(context, "Your password can not be empty please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
-            return false;
+            return 1;
         } else if (pass.length() < 5) {
-            Toast.makeText(context, "Your password is invalid please enter a valid username! (5 characters or more)", Toast.LENGTH_LONG).show();
-            return false;
+            return 2;
         }
-        return true;
+        return 0;
     }
 
     public Accounts validateNewUser(String enteredUsername, String enteredPassword, Accounts account) {
         boolean goodUsername, goodPassword;
 
-        if (checkForValidUsername(enteredUsername, account, getApplicationContext())) {
-            goodUsername = true;
-        } else {
-            goodUsername = false;
+        switch(checkForValidUsername(enteredUsername, account)) {
+            case 0:
+                goodUsername = true;
+                break;
+            case 1:
+                goodUsername = false;
+                errorMessage("Username can not be empty! Must be at least 5 characters long!", username);
+                break;
+            case 2:
+                goodUsername = false;
+                errorMessage("Username can not be under 5 characters! Must be at least 5 characters long!", username);
+                break;
+            case 3:
+                goodUsername = false;
+                errorMessage("Username already taken!", username);
+                break;
+            default:
+                goodUsername = false;
+                errorMessage("Error has occurred", username);
+                break;
         }
-        if (checkForValidPassword(enteredPassword, getApplicationContext())) {
-            goodPassword = true;
-        } else {
-            Toast.makeText(getApplicationContext(), "Please enter a valid password! (5 characters or more)", Toast.LENGTH_LONG).show();
-            goodPassword = false;
+
+        switch(checkForValidPassword(enteredPassword)) {
+            case 0:
+                goodPassword = true;
+                break;
+            case 1:
+                goodPassword = false;
+                errorMessage("Password can not be empty! Must be at least 5 characters long!", password);
+                break;
+            case 2:
+                goodPassword = false;
+                errorMessage("Password can not be under 5 characters! Must be at least 5 characters long!", password);
+                break;
+            default:
+                goodPassword = false;
+                errorMessage("Error has occurred", password);
+                break;
         }
+
         if (goodUsername && goodPassword) {
             Accounts newAccount = new Accounts(enteredUsername, enteredPassword);
             return newAccount;
         }
         return null;
+    }
+
+    public void errorMessage(String msg, EditText field) {
+        field.setError(msg);
     }
 }
